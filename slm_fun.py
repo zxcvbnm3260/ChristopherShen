@@ -76,12 +76,11 @@ except NameError:
     is_fmz=0
 else:
     is_fmz=1
+Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
 if is_fmz==0:
     Log=print
     LogStatus=print
-
-Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
 def Sleep(n):
     if is_fmz==0: time.sleep(n/1000)
