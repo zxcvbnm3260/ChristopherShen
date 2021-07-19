@@ -70,19 +70,23 @@ def slm_fmz_read_csv(add, index_col=0):
 #%% 7.FMZ函数本地化
 
 # 识别是否FMZ运行
-try:
-    IsVirtual()
-except NameError:
-    is_fmz=0
-else:
-    is_fmz=1
+# try:
+#     IsVirtual()
+# except NameError:
+#     is_fmz=0
+# else:
+#     is_fmz=1
+
+is_fmz= 1 if sys.platform=='linux' else 0
+
+COMPUTERNAME=os.getenv('COMPUTERNAME', 'defaultValue')
+if COMPUTERNAME=='SLM-VULTR-WIN': is_fmz=1
 
 if is_fmz==0:
     Log=print
     LogStatus=print
-else:
-    Log=Log
-    LogStatus=LogStatus
+
+Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
 def Sleep(n):
     if is_fmz==0: time.sleep(n/1000)
