@@ -82,14 +82,15 @@ is_fmz= 1 if sys.platform=='linux' else 0
 COMPUTERNAME=os.getenv('COMPUTERNAME', 'defaultValue')
 if COMPUTERNAME=='SLM-VULTR-WIN': is_fmz=1
 
+Log=Log
 if is_fmz==0:
-    log=print
+    Log=print
     # LogStatus=print
-else:
-    log=Log
+# else:
+    # Log=Log
     # LogStatus=LogStatus
 
-log('是否在FMZ上运行：is_fmz=', is_fmz)
+Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
 def Sleep(n):
     if is_fmz==0: time.sleep(n/1000)
