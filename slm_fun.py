@@ -85,6 +85,9 @@ if COMPUTERNAME=='SLM-VULTR-WIN': is_fmz=1
 if is_fmz==0:
     Log=print
     LogStatus=print
+else:
+    Log=Log
+    LogStatus=LogStatus
 
 Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
