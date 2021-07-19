@@ -1,4 +1,1 @@
-# ChristopherShen
-
-我的常用自定义函数。
-
+公开一个目录，方便python自动下载。
