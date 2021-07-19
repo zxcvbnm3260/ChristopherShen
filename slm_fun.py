@@ -92,8 +92,7 @@ def slm_fmz_read_csv(add, index_col=0):
 
 # Log('是否在FMZ上运行：is_fmz=', is_fmz)
 
-def Sleep(n):
-    global is_fmz
+def Sleep(n, is_fmz=is_fmz):
     if is_fmz==0: time.sleep(n/1000)
 
 # 无效：
