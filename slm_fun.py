@@ -1,19 +1,21 @@
 
-#%% 0.导入常用包
+#%% 1.导入常用包
 
 import pandas as pd
 import numpy as np
-from pytz import timezone
+# from pytz import timezone
+# import pytz
 from datetime import datetime, timedelta, timezone
+from tda import auth, client
+import requests
+
 import time
 import json
 import os
 import sys
-from tda import auth, client
-
 # print(1)
 
-#%% 1.df转为FMZ的table
+#%% 2.df转为FMZ的table
 
 def slm_df2table(df):
     columns = df.columns.values.tolist()
@@ -23,7 +25,7 @@ def slm_df2table(df):
         else: rows=rows+row_i
     return([columns,rows])
 
-#%% 2.datetime转为时间戳
+#%% 3.datetime转为时间戳
 
 # https://tool.chinaz.com/tools/unixtime.aspx
 
@@ -34,7 +36,7 @@ def slm_str2ts(str, tz_hours=-4):
     ts=dt.timestamp()
     return(ts)
 
-#%% 3.时间戳转为str
+#%% 4.时间戳转为str
 
 def slm_ts2str(ts, tz_hours=-4):
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
@@ -43,7 +45,7 @@ def slm_ts2str(ts, tz_hours=-4):
     str1 = str(datetime1)[:19]
     return(str1)
 
-#%% 4.取现在时间（美东时间）
+#%% 5.取现在时间（美东时间）
 
 def slm_now_us():
     utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -51,7 +53,7 @@ def slm_now_us():
     now1 = us_dt.strftime('%Y-%m-%d %H:%M:%S')
     return(now1)
 
-#%% 5.循环导入csv直至成功
+#%% 6.循环导入csv直至成功
 
 def slm_fmz_read_csv(add, index_col=0):
     is_error=1
@@ -65,28 +67,50 @@ def slm_fmz_read_csv(add, index_col=0):
             is_error=0
     return(df)
 
-#%% 6.FMZ的Log本地化
+#%% 7.FMZ函数本地化
 
-# _D()
-# LogStatus
+# 识别是否FMZ运行
+try:
+    IsVirtual()
+except NameError:
+    is_fmz=0
+else:
+    is_fmz=1
+
+if is_fmz==0:
+    Log=print
+    LogStatus=print
 
 def Sleep(n):
-    if sys.platform=='linux':
-        Sleep(n)
-    else:
-        time.sleep(n)
+    if is_fmz==0: time.sleep(n/1000)
 
-# def Log(str):
-#     if sys.platform=='linux':
-#         Log(str)
-#     else:
-#         print(str)
+# 无效：
+# def _D():
+#     if is_fmz==0: slm_now_us()
 
-# def Log(*objects):
-#     if sys.platform=='linux':
-#         Log(*objects)
-#     else:
-#         print(*objects)
+#%% 8.下载git文件
+
+def slm_download_git(zip_url, zip_inner_path, out_path, folder_name):
+    import os
+    if os.path.exists('git.zip'): os.remove('git.zip')
+    if os.path.exists(out_path): os.remove(out_path)
+    import shutil
+    if os.path.exists(folder_name): shutil.rmtree(folder_name)
+    Log('完成：删除上次下载的函数库。')
+
+    import wget
+    wget.download(zip_url, 'git.zip')
+    Log('完成：下载zip。')
+
+    import zipfile
+    zip_file = zipfile.ZipFile('git.zip')
+    zip_file.extract(zip_inner_path)
+    Log('完成：解压缩。')
+
+    shutil.copyfile(zip_inner_path, out_path)
+    Log('完成：复制到指定目录下。')
+
+
 
 
 # %% 草稿
