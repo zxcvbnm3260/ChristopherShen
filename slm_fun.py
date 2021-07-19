@@ -14,6 +14,7 @@ import json
 import os
 import sys
 # print(1)
+Log(1)
 
 #%% 2.df转为FMZ的table
 
