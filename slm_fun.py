@@ -80,6 +80,9 @@ else:
 if is_fmz==0:
     Log=print
     LogStatus=print
+else:
+    Log=Log
+    LogStatus=LogStatus
 
 def Sleep(n):
     if is_fmz==0: time.sleep(n/1000)
