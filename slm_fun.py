@@ -110,19 +110,19 @@ def slm_download_git(file_name, out_path):
     if os.path.exists(out_path): os.remove(out_path)
     import shutil
     if os.path.exists(folder_name): shutil.rmtree(folder_name)
-    Log('完成：删除上次下载的函数库。')
+    # Log('完成：删除上次下载的函数库。')
 
     import wget
     wget.download(zip_url, 'git.zip')
-    Log('完成：下载zip。')
+    # Log('完成：下载zip。')
 
     import zipfile
     zip_file = zipfile.ZipFile('git.zip')
     zip_file.extract(zip_inner_path)
-    Log('完成：解压缩。')
+    # Log('完成：解压缩。')
 
     shutil.copyfile(zip_inner_path, out_path)
-    Log('完成：复制到指定目录下。')
+    # Log('完成：复制到指定目录下。')
 
 
 
