@@ -78,15 +78,14 @@ def slm_fmz_read_csv(add, index_col=0):
 # else:
 #     is_fmz=1
 
-is_fmz= 1 if sys.platform=='linux' else 0
+# is_fmz= 1 if sys.platform=='linux' else 0
 
-COMPUTERNAME=os.getenv('COMPUTERNAME', 'defaultValue')
-if COMPUTERNAME=='SLM-VULTR-WIN': is_fmz=1
+# COMPUTERNAME=os.getenv('COMPUTERNAME', 'defaultValue')
+# if COMPUTERNAME=='SLM-VULTR-WIN': is_fmz=1
 
-Log=Log
-if is_fmz==0:
-    Log=print
-    # LogStatus=print
+# if is_fmz==0:
+#     Log=print
+#     LogStatus=print
 # else:
     # Log=Log
     # LogStatus=LogStatus
