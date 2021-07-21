@@ -148,7 +148,7 @@ def slm_fmz_df2table(df):
 #%%% 3.停止按钮结束循环
 
 def slm_fmz_stop_button(button_name='停止机器人'):
-    eval(cmd = GetCommand())
+    eval('cmd = GetCommand()')
     if cmd==button_name: 
         Log('收到指令：停止机器人！')
         eval('break')
