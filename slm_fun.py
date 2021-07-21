@@ -16,15 +16,13 @@ import sys
 # print(1)
 # Log(1)
 
-#%% 2.df转为FMZ的table
+#%% 2.取现在时间（美东时间）
 
-def slm_df2table(df):
-    columns = df.columns.values.tolist()
-    for i in range(df.shape[0]):
-        row_i=df[i:(i+1)].values.tolist()
-        if i==0: rows=row_i
-        else: rows=rows+row_i
-    return([columns,rows])
+def slm_now_us():
+    utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
+    us_dt = utc_dt.astimezone(timezone(timedelta(hours=-4)))
+    now1 = us_dt.strftime('%Y-%m-%d %H:%M:%S')
+    return(now1)
 
 #%% 3.datetime转为时间戳
 
@@ -46,15 +44,7 @@ def slm_ts2str(ts, tz_hours=-4):
     str1 = str(datetime1)[:19]
     return(str1)
 
-#%% 5.取现在时间（美东时间）
-
-def slm_now_us():
-    utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
-    us_dt = utc_dt.astimezone(timezone(timedelta(hours=-4)))
-    now1 = us_dt.strftime('%Y-%m-%d %H:%M:%S')
-    return(now1)
-
-#%% 6.循环导入csv直至成功
+#%% 5.循环导入csv直至成功
 
 def slm_fmz_read_csv(add, index_col=0):
     is_error=1
@@ -68,7 +58,54 @@ def slm_fmz_read_csv(add, index_col=0):
             is_error=0
     return(df)
 
-#%% 7.FMZ函数本地化
+#%% 6.下载我的git文件
+
+def slm_download_git(file_name, out_path):
+    zip_url='https://codeload.github.com/zxcvbnm3260/ChristopherShen/zip/refs/heads/master'
+    folder_name='ChristopherShen-master'
+    zip_inner_path='ChristopherShen-master/'+file_name
+    import os
+    if os.path.exists('git.zip'): os.remove('git.zip')
+    if os.path.exists(out_path): os.remove(out_path)
+    import shutil
+    if os.path.exists(folder_name): shutil.rmtree(folder_name)
+    # Log('完成：删除上次下载的函数库。')
+
+    import wget
+    wget.download(zip_url, 'git.zip')
+    # Log('完成：下载zip。')
+
+    import zipfile
+    zip_file = zipfile.ZipFile('git.zip')
+    zip_file.extract(zip_inner_path)
+    # Log('完成：解压缩。')
+
+    shutil.copyfile(zip_inner_path, out_path)
+    # Log('完成：复制到指定目录下。')
+
+#%% 7.从csv导入stock_list
+
+def slm_stock_list_from_csv():
+    wd1=os.getcwd()
+    add1=wd1+'/fmz/price_stock/stock_list.csv'
+    # 从我的git上下载stock_list：
+    slm_download_git(file_name='stock_list.csv', out_path=add1)
+    while not os.path.exists(add1):
+        Log('stock_list为空，等待创建，2秒后再看……')
+        Sleep(2000)
+
+    a1=slm_fmz_read_csv(add1,index_col=0)
+    a2=a1.loc[a1.exclude==0,'code'].to_list()
+    a3=list(set(a2))
+    if len(a2)!=len(a3):
+        Log('stock_list有重复！')
+        exit()
+    stock_list=a2
+    return([stock_list, a1])
+
+#%% FMZ相关函数
+
+#%%% 1.FMZ函数本地化
 
 # 识别是否FMZ运行
 # is_fmz= 1 if sys.platform=='linux' else 0
@@ -98,52 +135,23 @@ def slm_fmz_read_csv(add, index_col=0):
 # def _D():
 #     if is_fmz==0: slm_now_us()
 
-#%% 8.下载git文件
+#%%% 2.df转为FMZ的table
 
-def slm_download_git(file_name, out_path):
-    zip_url='https://codeload.github.com/zxcvbnm3260/ChristopherShen/zip/refs/heads/master'
-    folder_name='ChristopherShen-master'
-    zip_inner_path='ChristopherShen-master/'+file_name
-    import os
-    if os.path.exists('git.zip'): os.remove('git.zip')
-    if os.path.exists(out_path): os.remove(out_path)
-    import shutil
-    if os.path.exists(folder_name): shutil.rmtree(folder_name)
-    # Log('完成：删除上次下载的函数库。')
+def slm_fmz_df2table(df):
+    columns = df.columns.values.tolist()
+    for i in range(df.shape[0]):
+        row_i=df[i:(i+1)].values.tolist()
+        if i==0: rows=row_i
+        else: rows=rows+row_i
+    return([columns,rows])
 
-    import wget
-    wget.download(zip_url, 'git.zip')
-    # Log('完成：下载zip。')
+#%%% 3.停止按钮结束循环
 
-    import zipfile
-    zip_file = zipfile.ZipFile('git.zip')
-    zip_file.extract(zip_inner_path)
-    # Log('完成：解压缩。')
-
-    shutil.copyfile(zip_inner_path, out_path)
-    # Log('完成：复制到指定目录下。')
-
-#%% 9.从csv导入stock_list
-
-def slm_stock_list_from_csv():
-    wd1=os.getcwd()
-    add1=wd1+'/fmz/price_stock/stock_list.csv'
-    # 从我的git上下载stock_list：
-    slm_download_git(file_name='stock_list.csv', out_path=add1)
-    while not os.path.exists(add1):
-        Log('stock_list为空，等待创建，2秒后再看……')
-        Sleep(2000)
-
-    a1=slm_fmz_read_csv(add1,index_col=0)
-    a2=a1.loc[a1.exclude==0,'code'].to_list()
-    a3=list(set(a2))
-    if len(a2)!=len(a3):
-        Log('stock_list有重复！')
-        exit()
-    stock_list=a2
-    return([stock_list, a1])
-
-
+def slm_fmz_stop_button(button_name='停止机器人'):
+    cmd = GetCommand()
+    if cmd==button_name: 
+        Log('收到指令：停止机器人！')
+        eval('break')
 
 
 # %% 草稿
