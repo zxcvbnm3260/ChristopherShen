@@ -148,6 +148,8 @@ def slm_fmz_df2table(df):
 #%%% 3.停止按钮结束循环
 
 def slm_fmz_stop_button(cmd, button_name='停止机器人'):
+    def apply(f, *args, **kw):
+        return f(*args, **kw)
     if cmd==button_name: 
         # Log('收到指令：停止机器人！')
         apply(Log, '收到指令：停止机器人！')
