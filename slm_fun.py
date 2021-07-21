@@ -149,8 +149,7 @@ def slm_fmz_df2table(df):
 
 def slm_fmz_stop_button(cmd, button_name='停止机器人'):
     if cmd==button_name: 
-        import Log
-        Log('收到指令：停止机器人！')
+        print('收到指令：停止机器人！')
         eval('break')
 
 
