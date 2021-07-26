@@ -156,12 +156,14 @@ def slm_stock_list_from_csv_bigindex():
 #%%% 2.df转为FMZ的table
 
 def slm_fmz_df2table(df):
+    import copy
     columns = df.columns.values.tolist()
     for i in range(df.shape[0]):
-        row_i=df[i:(i+1)].values.tolist()
-        if i==0: rows=row_i
-        else: rows=rows+row_i
-    return([columns,rows])
+        row_i = df[i:(i+1)].values.tolist()
+        if i==0: 
+            rows = copy.deepcopy(row_i)
+        else: rows = rows + row_i
+    return([columns, rows])
 
 #%%% 3.停止按钮结束循环
 
