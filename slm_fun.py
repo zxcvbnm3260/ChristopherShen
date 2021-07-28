@@ -121,6 +121,19 @@ def slm_stock_list_from_csv_bigindex():
     stock_list=a2
     return([stock_list, a1])
 
+#%% 8.从git下载字体文件
+
+def slm_plt_font(font_file='simhei.ttf'):
+    wd1=os.getcwd()
+    add1=wd1+'/fmz/font/'
+    if not os.path.exists(add1): os.makedirs(add1)
+    add2=add1+font_file
+    # 从我的git上下载stock_list：
+    slm_download_git(file_name=font_file, out_path=add1)
+    from matplotlib.font_manager import FontProperties
+    font = FontProperties(fname=add2)
+    return(font)
+
 #%% FMZ相关函数
 
 #%%% 1.FMZ函数本地化
