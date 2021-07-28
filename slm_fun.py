@@ -171,8 +171,9 @@ def slm_fmz_stop_button(cmd, button_name='停止机器人'):
     if cmd==button_name: 
         # print('收到指令：停止机器人！')
         # Log('收到指令：停止机器人！')
-        eval('break')
+        # eval('break')
         # eval('exit()')
+        exit()
 
 
 # %% 草稿
