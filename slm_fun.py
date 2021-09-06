@@ -8,11 +8,13 @@ import numpy as np
 from datetime import datetime, timedelta, timezone
 from tda import auth, client
 import requests
+import socket
 
 import time
 import json
 import os
 import sys
+
 # print(1)
 # Log(1)
 
