@@ -87,7 +87,7 @@ def slm_download_git(file_name, out_path):
 
 #%% 7.从csv导入stock_list
 
-def slm_stock_list_from_csv():
+def slm_stock_list_from_csv(con='a1.exclude==0'):
     wd1=os.getcwd()
     add1=wd1+'/fmz/price_stock/stock_list.csv'
     # 从我的git上下载stock_list：
@@ -97,25 +97,7 @@ def slm_stock_list_from_csv():
         Sleep(2000)
 
     a1=slm_fmz_read_csv(add1,index_col=0)
-    a2=a1.loc[a1.exclude==0,'code'].to_list()
-    a3=list(set(a2))
-    if len(a2)!=len(a3):
-        Log('stock_list有重复！')
-        exit()
-    stock_list=a2
-    return([stock_list, a1])
-
-def slm_stock_list_from_csv_bigindex():
-    wd1=os.getcwd()
-    add1=wd1+'/fmz/price_stock/stock_list.csv'
-    # 从我的git上下载stock_list：
-    slm_download_git(file_name='stock_list.csv', out_path=add1)
-    while not os.path.exists(add1):
-        Log('stock_list为空，等待创建，2秒后再看……')
-        Sleep(2000)
-
-    a1=slm_fmz_read_csv(add1,index_col=0)
-    a2=a1.loc[a1.comment=='big index','code'].to_list()
+    a2=a1.loc[eval(con),'code'].to_list()
     a3=list(set(a2))
     if len(a2)!=len(a3):
         Log('stock_list有重复！')
