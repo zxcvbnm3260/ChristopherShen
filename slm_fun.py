@@ -158,8 +158,8 @@ def slm_fmz_df2table(df):
     import copy
     df2 = copy.deepcopy(df)
     for c in range(df.shape[1]):
-        df2.iloc[:, c] = str(df.iloc[:, c])
-
+        df2.iloc[:, c] = df.iloc[:, c].astype(str)
+        
     for i in range(df2.shape[0]):
         row_i = df[i:(i+1)].values.tolist()
         if i==0: 
