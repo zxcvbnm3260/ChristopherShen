@@ -153,9 +153,14 @@ def slm_plt_font(font_file='simhei.ttf'):
 #%%% 2.df转为FMZ的table
 
 def slm_fmz_df2table(df):
-    import copy
     columns = df.columns.values.tolist()
-    for i in range(df.shape[0]):
+
+    import copy
+    df2 = copy.deepcopy(df)
+    for c in range(df.shape[1]):
+        df2.iloc[:, c] = str(df.iloc[:, c])
+
+    for i in range(df2.shape[0]):
         row_i = df[i:(i+1)].values.tolist()
         if i==0: 
             rows = copy.deepcopy(row_i)
