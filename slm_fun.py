@@ -159,9 +159,9 @@ def slm_fmz_df2table(df):
     df2 = copy.deepcopy(df)
     for c in range(df.shape[1]):
         df2.iloc[:, c] = df.iloc[:, c].astype(str)
-        
+
     for i in range(df2.shape[0]):
-        row_i = df[i:(i+1)].values.tolist()
+        row_i = df2[i:(i+1)].values.tolist()
         if i==0: 
             rows = copy.deepcopy(row_i)
         else: rows = rows + row_i
