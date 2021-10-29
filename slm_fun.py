@@ -96,9 +96,10 @@ def slm_stock_list_from_csv(con='a1.exclude==0'):
         Log('stock_list为空，等待创建，2秒后再看……')
         Sleep(2000)
 
-    a1=slm_fmz_read_csv(add1,index_col=0)
-    a2=a1.loc[eval(con),'code'].to_list()
-    a3=list(set(a2))
+    a1 = slm_fmz_read_csv(add1,index_col=0)
+    a1 = a1[eval(con)]
+    a2 = a1.loc[eval(con),'code'].to_list()
+    a3 = list(set(a2))
     if len(a2)!=len(a3):
         Log('stock_list有重复！')
         exit()
