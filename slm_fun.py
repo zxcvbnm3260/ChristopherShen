@@ -88,8 +88,8 @@ def slm_download_git(file_name, out_path):
 #%% 7.从csv导入stock_list
 
 def slm_stock_list_from_csv(con='a1.exclude==0'):
-    wd1=os.getcwd()
-    add1=wd1+'/fmz/price_stock/stock_list.csv'
+    wd1 = os.getcwd()
+    add1 = wd1 + '/fmz/price_stock/stock_list.csv'
     # 从我的git上下载stock_list：
     slm_download_git(file_name='stock_list.csv', out_path=add1)
     while not os.path.exists(add1):
