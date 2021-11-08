@@ -119,6 +119,36 @@ def slm_plt_font(font_file='simhei.ttf'):
     font = FontProperties(fname=add2)
     return(font)
 
+# %% 9.前n个交易日是哪天？（含输入日）
+
+def slm_previous_tradedays(date, n): 
+    import os 
+    # 读取交易日表
+    ADD01 = os.getcwd() + '/fmz/price_stock/tradeday_list.csv'
+    if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
+    TRADEDAY_DF = slm_fmz_read_csv(ADD01, index_col=0)
+
+    i = TRADEDAY_DF.index.values[TRADEDAY_DF.date==date][0]
+    j = -1
+    while True:
+        is_tradeday = TRADEDAY_DF.loc[i, 'is_tradeday']
+        date1 = TRADEDAY_DF.loc[i, 'date']
+        if is_tradeday==1: 
+            j += 1
+            if j==n: return date1
+        i -= 1
+
+# %% 10.两日期相差多少个交易日
+def slm_how_many_tradedays(date1, date2):
+    import os 
+    # 读取交易日表
+    ADD01 = os.getcwd() + '/fmz/price_stock/tradeday_list.csv'
+    if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
+    TRADEDAY_DF = slm_fmz_read_csv(ADD01, index_col=0)
+    index1 = TRADEDAY_DF.index.values[TRADEDAY_DF.date==date1][0]
+    index2 = TRADEDAY_DF.index.values[TRADEDAY_DF.date==date2][0]
+    return sum(TRADEDAY_DF.loc[index1:index2, 'is_tradeday'])
+
 #%% FMZ相关函数
 
 #%%% 1.FMZ函数本地化
