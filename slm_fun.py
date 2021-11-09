@@ -22,7 +22,9 @@ import sys
 
 def slm_now_us():
     utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
-    us_dt = utc_dt.astimezone(timezone(timedelta(hours=-4)))
+    # us_dt = utc_dt.astimezone(timezone(timedelta(hours=-4)))
+    import pytz
+    us_dt = utc_dt.astimezone(pytz.timezone('US/Eastern'))
     now1 = us_dt.strftime('%Y-%m-%d %H:%M:%S')
     return(now1)
 
