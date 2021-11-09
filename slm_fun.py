@@ -32,16 +32,16 @@ def slm_now_us():
 
 # https://tool.chinaz.com/tools/unixtime.aspx
 
-def slm_str2ts(str, tz_hours=-4):
+def slm_str2ts(str, tz_hours = -5):
     dt = datetime.strptime(str, "%Y-%m-%d %H:%M:%S")
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
     dt = dt.replace(tzinfo=tz_utc_4)
-    ts=dt.timestamp()
+    ts = dt.timestamp()
     return(ts)
 
 #%% 4.时间戳转为str
 
-def slm_ts2str(ts, tz_hours=-4):
+def slm_ts2str(ts, tz_hours = -5):
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
     import pandas as pd
     datetime1 = pd.to_datetime(ts, unit='s', utc=True).tz_convert(tz_utc_4)
