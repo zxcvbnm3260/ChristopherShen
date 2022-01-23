@@ -108,6 +108,26 @@ def slm_stock_list_from_csv(con='a1.exclude==0'):
     stock_list=a2
     return([stock_list, a1])
 
+def slm_futures_list_from_csv(con='a1.exclude==0'):
+    wd1 = os.getcwd()
+    add1 = wd1 + '/fmz/price_stock/futures_list.csv'
+    # 从我的git上下载stock_list：
+    slm_download_git(file_name='futures_list.csv', out_path=add1)
+    while not os.path.exists(add1):
+        Log('futures_list为空，等待创建，2秒后再看……')
+        Sleep(2000)
+
+    a1 = slm_fmz_read_csv(add1, index_col=0)
+    # a1 = a1[eval(con)]
+    # a2 = a1.loc[eval(con),'code'].to_list()
+    a2 = a1.to_list()
+    a3 = list(set(a2))
+    if len(a2)!=len(a3):
+        Log('stock_list有重复！')
+        exit()
+    stock_list=a2
+    return([stock_list, a1])
+
 #%% 8.从git下载字体文件
 
 def slm_plt_font(font_file='simhei.ttf'):
@@ -127,14 +147,10 @@ def slm_previous_tradedays(date, n):
     import os 
     # 读取交易日表
     ADD01 = os.getcwd() + '/fmz/price_stock/tradeday_list.csv'
-    # if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
-    slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
-    print(11)
+    if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
     TRADEDAY_DF = slm_fmz_read_csv(ADD01, index_col=0)
-    print(22)
 
     i = TRADEDAY_DF.index.values[TRADEDAY_DF.date==date][0]
-    print(33)
     j = -1
     while True:
         is_tradeday = TRADEDAY_DF.loc[i, 'is_tradeday']
