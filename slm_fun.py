@@ -32,8 +32,7 @@ def slm_now_us():
 
 # https://tool.chinaz.com/tools/unixtime.aspx
 
-def slm_str2ts(str, tz_hours = -4):
-    str1 = str
+def slm_str2ts(str1, tz_hours = -4):
     dt = datetime.strptime(str(str1), "%Y-%m-%d %H:%M:%S")
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
     dt = dt.replace(tzinfo=tz_utc_4)
