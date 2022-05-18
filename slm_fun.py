@@ -166,7 +166,7 @@ def slm_how_many_tradedays(date1, date2):
     # 读取交易日表
     add0 = os.getcwd() + '/fmz/price_stock/'
     if not os.path.exists(add0): 
-        Log('%s不存在，创建之。'% add0)
+        print('%s不存在，创建之。'% add0)
         os.makedirs(add0)
 
     ADD01 = add0 + 'tradeday_list.csv'
