@@ -165,8 +165,11 @@ def slm_how_many_tradedays(date1, date2):
     import os 
     # 读取交易日表
     add0 = os.getcwd() + '/fmz/price_stock/'
-    if not os.path.exists(add0): os.makedirs(add0)
-    ADD01 = os.getcwd() + '/fmz/price_stock/tradeday_list.csv'
+    if not os.path.exists(add0): 
+        Log('%s不存在，创建之。'% add0)
+        os.makedirs(add0)
+
+    ADD01 = add0 + 'tradeday_list.csv'
     if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
     TRADEDAY_DF = slm_fmz_read_csv(ADD01, index_col=0)
     index1 = TRADEDAY_DF.index.values[TRADEDAY_DF.date==date1][0]
