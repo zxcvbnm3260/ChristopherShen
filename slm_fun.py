@@ -146,7 +146,12 @@ def slm_plt_font(font_file='simhei.ttf'):
 def slm_previous_tradedays(date, n): 
     import os 
     # 读取交易日表
-    ADD01 = os.getcwd() + '/fmz/price_stock/tradeday_list.csv'
+    add0 = os.getcwd() + '/fmz/price_stock/'
+    if not os.path.exists(add0): 
+        print('%s不存在，创建之。'% add0)
+        os.makedirs(add0)
+
+    ADD01 = add0 + 'tradeday_list.csv'
     if not os.path.exists(ADD01): slm_download_git(file_name = 'tradeday_list.csv', out_path = ADD01)
     TRADEDAY_DF = slm_fmz_read_csv(ADD01, index_col=0)
 
