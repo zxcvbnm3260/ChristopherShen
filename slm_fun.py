@@ -33,12 +33,11 @@ def slm_now_us():
 # https://tool.chinaz.com/tools/unixtime.aspx
 
 
-
 def slm_str2ts(str1, tz_hours=None):
     # 首先将字符串转换为 datetime 对象
     dt = datetime.strptime(str1, "%Y-%m-%d %H:%M:%S")
-    Log(f'dt = {dt}')
-    Log(f'tz_hours = {tz_hours}')
+    print(f'dt = {dt}')
+    print(f'tz_hours = {tz_hours}')
     
     # 设置默认的时区为 New York
     new_york_tz = pytz.timezone("America/New_York")
@@ -52,12 +51,12 @@ def slm_str2ts(str1, tz_hours=None):
     
     # 计算 UTC 时间
     utc_dt = dt - timedelta(hours=tz_hours)
-    Log(f'utc_dt = {utc_dt}')
-    Log(f'tz_hours = {tz_hours}')
+    print(f'utc_dt = {utc_dt}')
+    print(f'tz_hours = {tz_hours}')
     
     # 获取 Unix 时间戳
     ts = utc_dt.timestamp()
-    Log(f'ts = {ts}')
+    print(f'ts = {ts}')
     
     return ts
 
