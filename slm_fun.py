@@ -4,7 +4,7 @@
 import pandas as pd
 import numpy as np
 # from pytz import timezone
-# import pytz
+import pytz
 from datetime import datetime, timedelta, timezone
 from tda import auth, client
 import requests
