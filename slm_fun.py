@@ -4,7 +4,7 @@
 import pandas as pd
 import numpy as np
 # from pytz import timezone
-# import pytz
+import pytz
 from datetime import datetime, timedelta, timezone
 from tda import auth, client
 import requests
@@ -22,7 +22,6 @@ import sys
 
 def slm_now_us():
     utc_dt = datetime.utcnow().replace(tzinfo=timezone.utc)
-    # us_dt = utc_dt.astimezone(timezone(timedelta(hours=-4)))
     import pytz
     us_dt = utc_dt.astimezone(pytz.timezone('US/Eastern'))
     now1 = us_dt.strftime('%Y-%m-%d %H:%M:%S')
@@ -33,6 +32,7 @@ def slm_now_us():
 # https://tool.chinaz.com/tools/unixtime.aspx
 
 def slm_str2ts(str1, tz_hours = -4):
+    if datetime.now(pytz.timezone("America/New_York")).dst() == timedelta(0): tz_hours = -5
     dt = datetime.strptime(str(str1), "%Y-%m-%d %H:%M:%S")
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
     dt = dt.replace(tzinfo=tz_utc_4)
@@ -42,6 +42,7 @@ def slm_str2ts(str1, tz_hours = -4):
 #%% 4.时间戳转为str
 
 def slm_ts2str(ts, tz_hours = -4):
+    if datetime.now(pytz.timezone("America/New_York")).dst() == timedelta(0): tz_hours = -5
     tz_utc_4 = timezone(timedelta(hours=tz_hours))
     import pandas as pd
     datetime1 = pd.to_datetime(ts, unit='s', utc=True).tz_convert(tz_utc_4)
