@@ -34,29 +34,27 @@ def slm_now_us():
 
 
 def slm_str2ts(str1, tz_hours=None):
-    # 首先将字符串转换为 datetime 对象
+    # 将字符串转换为 datetime 对象
     dt = datetime.strptime(str1, "%Y-%m-%d %H:%M:%S")
-    print(f'dt = {dt}')
-    print(f'tz_hours = {tz_hours}')
-    
+
     # 设置默认的时区为 New York
     new_york_tz = pytz.timezone("America/New_York")
-    
+
     # 如果没有提供 tz_hours，使用 str1 的日期来确定时区偏移
     if tz_hours is None:
         # 将 datetime 对象本地化到 New York 时区
         localized_dt = new_york_tz.localize(dt, is_dst=None)
         # 获取时区偏移作为小时数
         tz_hours = localized_dt.utcoffset().total_seconds() / 3600
-    
-    # 计算 UTC 时间
-    utc_dt = dt - timedelta(hours=tz_hours)
-    print(f'utc_dt = {utc_dt}')
-    print(f'tz_hours = {tz_hours}')
+
+    # 修正时区偏移
+    corrected_dt = dt - timedelta(hours=tz_hours)
+
+    # 明确设置 datetime 对象为 UTC 时区
+    utc_dt = corrected_dt.replace(tzinfo=pytz.utc)
     
     # 获取 Unix 时间戳
     ts = utc_dt.timestamp()
-    print(f'ts = {ts}')
     
     return ts
 
