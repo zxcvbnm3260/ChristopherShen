@@ -6,6 +6,7 @@ import numpy as np
 # from pytz import timezone
 import pytz
 from datetime import datetime, timedelta, timezone
+from dateutil import tz
 from tda import auth, client
 import requests
 import socket
@@ -31,27 +32,66 @@ def slm_now_us():
 
 # https://tool.chinaz.com/tools/unixtime.aspx
 
-def slm_str2ts(str1, tz_hours = None):
+def slm_str2ts(str1, tz_hours=None):
+    # 将字符串转换为 datetime 对象
+    dt = datetime.strptime(str1, "%Y-%m-%d %H:%M:%S")
+    
+    # 指定时区
+    tz_name = "America/New_York"
+    
+    # 如果没有提供 tz_hours，基于东部时间判断夏令时或冬令时
     if tz_hours is None:
-        tz_hours = -4
-        if datetime.now(pytz.timezone("America/New_York")).dst() == timedelta(0): tz_hours = -5
-    dt = datetime.strptime(str(str1), "%Y-%m-%d %H:%M:%S")
-    tz_utc_4 = timezone(timedelta(hours=tz_hours))
-    dt = dt.replace(tzinfo=tz_utc_4)
+        tz_info = tz.gettz(tz_name)
+        dt = dt.replace(tzinfo=tz_info)
+        
+        # 判断是否为夏令时
+        if bool(dt.dst()):
+            tz_hours = -4
+        else:
+            tz_hours = -5
+    
+    # 如果提供了 tz_hours，就创建相应的时区对象
+    tz_utc_offset = timezone(timedelta(hours=tz_hours))
+    
+    # 将 datetime 对象的时区信息设置为 tz_utc_offset
+    dt = dt.astimezone(tz_utc_offset)
+    
+    # 获取 Unix 时间戳
     ts = dt.timestamp()
-    return(ts)
+    
+    return ts
+
 
 #%% 4.时间戳转为str
 
-def slm_ts2str(ts, tz_hours = None):
+def slm_ts2str(ts, tz_hours=None):
+    # 创建一个UTC时区的datetime对象
+    utc_dt = pd.to_datetime(ts, unit='s', utc=True)
+    
+    # 指定纽约时区
+    ny_tz = pytz.timezone("America/New_York")
+    
+    # 转换到纽约时区
+    ny_dt = utc_dt.tz_convert(ny_tz)
+    
+    # 如果没有提供 tz_hours，根据纽约时间来确定夏令时或冬令时
     if tz_hours is None:
-        tz_hours = -4
-        if datetime.now(pytz.timezone("America/New_York")).dst() == timedelta(0): tz_hours = -5
-    tz_utc_4 = timezone(timedelta(hours=tz_hours))
-    import pandas as pd
-    datetime1 = pd.to_datetime(ts, unit='s', utc=True).tz_convert(tz_utc_4)
-    str1 = str(datetime1)[:19]
-    return(str1)
+        if ny_dt.dst() != timedelta(0):
+            tz_hours = -4  # 夏令时
+        else:
+            tz_hours = -5  # 冬令时
+
+    # 根据tz_hours创建一个新的时区
+    new_tz = timezone(timedelta(hours=tz_hours))
+    
+    # 转换到新的时区
+    new_dt = ny_dt.tz_convert(new_tz)
+    
+    # 将datetime对象转换为字符串
+    str1 = new_dt.strftime("%Y-%m-%d %H:%M:%S")
+    
+    return str1
+
 
 #%% 5.循环导入csv直至成功
 
