@@ -32,34 +32,29 @@ def slm_now_us():
 
 # https://tool.chinaz.com/tools/unixtime.aspx
 
+
 def slm_str2ts(str1, tz_hours=None):
-    # 将字符串转换为 datetime 对象
+    # 首先将字符串转换为 datetime 对象
     dt = datetime.strptime(str1, "%Y-%m-%d %H:%M:%S")
     
-    # 指定时区
-    tz_name = "America/New_York"
+    # 设置默认的时区为 New York
+    new_york_tz = pytz.timezone("America/New_York")
     
-    # 如果没有提供 tz_hours，基于东部时间判断夏令时或冬令时
+    # 如果没有提供 tz_hours，使用 str1 的日期来确定时区偏移
     if tz_hours is None:
-        tz_info = tz.gettz(tz_name)
-        dt = dt.replace(tzinfo=tz_info)
-        
-        # 判断是否为夏令时
-        if bool(dt.dst()):
-            tz_hours = -4
-        else:
-            tz_hours = -5
+        # 将 datetime 对象本地化到 New York 时区
+        localized_dt = new_york_tz.localize(dt, is_dst=None)
+        # 获取时区偏移作为小时数
+        tz_hours = localized_dt.utcoffset().total_seconds() / 3600
     
-    # 如果提供了 tz_hours，就创建相应的时区对象
-    tz_utc_offset = timezone(timedelta(hours=tz_hours))
-    
-    # 将 datetime 对象的时区信息设置为 tz_utc_offset
-    dt = dt.astimezone(tz_utc_offset)
+    # 计算 UTC 时间
+    utc_dt = dt - timedelta(hours=tz_hours)
     
     # 获取 Unix 时间戳
-    ts = dt.timestamp()
+    ts = utc_dt.timestamp()
     
     return ts
+
 
 
 #%% 4.时间戳转为str
